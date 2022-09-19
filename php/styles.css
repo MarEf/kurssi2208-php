@@ -1,0 +1,31 @@
+table {
+    border-collapse: collapse;
+}
+
+td,
+th {
+    border: 1px solid black;
+    padding: 2px;
+    text-align: left;
+    align-items: middle;
+}
+
+.lomake {
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+label,
+input,
+textarea,
+button,
+select {
+    width: 100%;
+    display: block;
+    margin-top: 0.5em;
+}
