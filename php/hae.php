@@ -36,7 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         # Valmistellaan haku suojautuen injektioilta
         $haku = $yhteys->prepare($kysely);
-        $haku->bind_param("si", $elokuva, $genre);
+        if ($genre) {
+            $haku->bind_param("si", $elokuva, $genre);
+        } else {
+            $haku->bind_param("s", $elokuva);
+        }
         $haku->execute();
 
         #Noudetaand data
