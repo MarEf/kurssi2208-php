@@ -31,7 +31,7 @@
         <h2>Lisää uusi elokuva</h2>
         <form action="uusi.php" method="post">
             <label for="nimi"> Elokuvan nimi
-                <input type="text" name="nimi" required>
+                <input type="text" name="nimi" maxlength="128" required>
             </label>
             <label for="kuvaus"> Kuvaus
                 <textarea name="kuvaus" id="kuvaus" required></textarea>
@@ -49,13 +49,13 @@
                 <input type="number" name="vuokra" id="vuokra" min="1" , max="7" required>
             </label>
             <label for="hinta"> Vuokran hinta (euroina)
-                <input type="number" name="hinta" id="hinta" step=".01" required>
+                <input type="number" name="hinta" id="hinta" step=".01" max="9999.99" required>
             </label>
             <label for="pituus"> Pituus (minuutteina)
                 <input type="number" name="pituus" id="pituus" required>
             </label>
             <label for="korvaus">Korvaushinta
-                <input type="number" name="korvaus" id="korvaus" step=".01" required>
+                <input type="number" name="korvaus" id="korvaus" step=".01" max="99999.99" required>
             </label>
             <label for="ikaraja">Ikäraja
                 <select name="ikaraja" id="ikaraja" required>
