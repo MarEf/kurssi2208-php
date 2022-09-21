@@ -1,23 +1,56 @@
-table {
-    border-collapse: collapse;
+:root {
+    --background-color: whitesmoke;
+    --cell-color: white;
+    --button-color: lightgray;
 }
 
-td,
-th {
-    border: 1px solid black;
-    padding: 2px;
-    text-align: left;
-    align-items: middle;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--background-color);
 }
 
 .lomake {
-    width: 200px;
+    width: 250px;
+    margin-bottom: 3em;
     margin-left: auto;
     margin-right: auto;
 }
 
 h1 {
     text-align: center;
+    padding: 1.5rem;
+}
+
+h2 {
+    margin-bottom: 0.7rem;
+    text-align: center;
+}
+
+textarea {
+    height: 5em;
+    resize: none;
+}
+
+input,
+select {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    background-color: var(--cell-color);
+}
+
+button {
+    background-color: var(--button-color);
+}
+
+input,
+select,
+button {
+    height: 2.3em;
 }
 
 label,
@@ -27,5 +60,26 @@ button,
 select {
     width: 100%;
     display: block;
-    margin-top: 0.5em;
+    border: none;
+    border-radius: 3px;
+    margin-top: 0.7em;
+}
+
+.checkbox label,
+.checkbox input {
+    height: auto;
+    width: auto;
+    display: inline-block;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+td,
+th {
+    border: 1px solid black;
+    padding: 0.5em;
+    text-align: left;
+    align-items: middle;
 }

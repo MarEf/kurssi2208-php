@@ -1,3 +1,7 @@
+<?php
+include 'connect.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -15,7 +19,7 @@
         <h2>Hae elokuvia</h2>
         <form action="hae.php" method="post">
             <label for="elokuva">
-                <input type="text" name="elokuva" id="elokuva">
+                <input type="text" name="elokuva" id="elokuva" placeholder="Elokuvan nimi tai nimen osa">
             </label>
             <label for="genre">
                 <select name="genre" id="genre">
@@ -31,12 +35,12 @@
         <h2>Lisää uusi elokuva</h2>
         <form action="uusi.php" method="post">
             <label for="nimi"> Elokuvan nimi
-                <input type="text" name="nimi" required>
+                <input type="text" name="nimi" maxlength="128" required>
             </label>
             <label for="kuvaus"> Kuvaus
                 <textarea name="kuvaus" id="kuvaus" required></textarea>
-            </label> Julkaisuvuosi
-            <label for="julkaistu">
+            </label>
+            <label for="julkaistu"> Julkaisuvuosi
                 <input type="number" name="vuosi" id="vuosi" minlength="4" maxlength="4" required>
             </label>
             <label for="kieli"> Kieli
@@ -45,17 +49,17 @@
                     <?php list_data('language') ?>
                 </select>
             </label>
-            <label for="vuokra-aika"> Vuokra-aika (viikkoina, 1-7)
+            <label for="vuokra-aika"> Vuokra-aika (päivinä, 1-7)
                 <input type="number" name="vuokra" id="vuokra" min="1" , max="7" required>
             </label>
             <label for="hinta"> Vuokran hinta (euroina)
-                <input type="number" name="hinta" id="hinta" step=".01" required>
+                <input type="number" name="hinta" id="hinta" min="0" step=".01" required>
             </label>
             <label for="pituus"> Pituus (minuutteina)
-                <input type="number" name="pituus" id="pituus" required>
+                <input type="number" name="pituus" min="0" max="32767" id="pituus" required>
             </label>
             <label for="korvaus">Korvaushinta
-                <input type="number" name="korvaus" id="korvaus" step=".01" required>
+                <input type="number" name="korvaus" id="korvaus" min="0" step=".01" required>
             </label>
             <label for="ikaraja">Ikäraja
                 <select name="ikaraja" id="ikaraja" required>
@@ -67,9 +71,10 @@
                     <option value="NC-17">NC-17 - Adults Only</option>
                 </select>
             </label>
-            <label for="extra"> Special features
-                <input type="text" name="extra" id="extra">
+            <label for="extra"> Special Features
+                <?php get_features() ?>
             </label>
+
             <button type="submit">Lisää elokuva</button>
         </form>
     </div>
@@ -79,27 +84,14 @@
 
 <?php
 
-
 function fetch_data($table)
 {
-    $palvelin = "localhost";
-    $kayttaja = "root";
-    $salasana = "";
-    $tietokanta = "sakila";
-
-    // luo yhteys
-    $yhteys = new mysqli($palvelin, $kayttaja, $salasana, $tietokanta);
-
-    // jos yhteyden muodostaminen ei onnistunut, keskeytä
-    if ($yhteys->connect_error) {
-        die("Yhteyden muodostaminen epäonnistui: " . $yhteys->connect_error);
-    }
-    // aseta merkistökoodaus (muuten ääkköset sekoavat)
-    $yhteys->set_charset("utf8");
+    $yhteys = connectToServer();
 
     //Haetaan dataa tietokannasta
     $kysely = "SELECT $table" . "_id, name FROM $table";
     $tulos = $yhteys->query($kysely);
+    $yhteys->close();
 
     return $tulos;
 }
@@ -113,5 +105,29 @@ function list_data($table)
         #title, description, release_year, rating
         echo "<option value='{$row["$table" . "_id"]}'>{$row['name']}</option>";
     }
+}
+
+
+function get_features()
+{
+    $yhteys = connectToServer();
+    $kysely = "SHOW COLUMNS FROM film LIKE 'special_features'";
+    $tulos = $yhteys->query($kysely);
+
+    if ($tulos !== false) {
+        $rivi = $tulos->fetch_assoc();
+        $str = trim(substr($rivi['Type'], 3), '()');
+        $extrasArr = explode(",", $str);
+    }
+
+    foreach ($extrasArr as $extra) {
+        $ex = trim($extra, "'");
+        echo "<div class=\"checkbox\">
+                <label>
+                    <input type=\"checkbox\" name=\"extra[]\" value=\"$extra\"> $ex
+                </label>
+              </div>";
+    }
+    $yhteys->close();
 }
 ?>
